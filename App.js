@@ -2,9 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './src/screens/Home';
-import FirstScreen from './src/screens/FirstScreen';
-import SecondScreen from './src/screens/SecondScreen';
+import Home from './screens/Home';
+import FirstScreen from './screens/FirstScreen';
+import SecondScreen from './screens/SecondScreen';
 
 export default function App() {
   const Stack = createStackNavigator()
