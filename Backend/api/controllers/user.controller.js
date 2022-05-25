@@ -96,6 +96,10 @@ const uploadProfile = async (req, res) => {
   }
 };
 
+const getPics = async (req, res) => {
+  
+}
+
 const signOut = async (req, res) => {
   if (req.headers && req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];

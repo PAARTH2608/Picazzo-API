@@ -3,7 +3,7 @@ const router = require("express").Router();
 const { isAuth } = require("../middlewares/auth");
 const {
   validateUserSignUp,
-  userVlidation,
+  userValidation,
   validateUserSignIn,
 } = require("../middlewares/validation/user");
 
@@ -19,10 +19,10 @@ const fileFilter = (req, file, cb) => {
 };
 const uploads = multer({ storage, fileFilter });
 
-router.post("/create-user", validateUserSignUp, userVlidation, (req, res) => {
+router.post("/create-user", validateUserSignUp, userValidation, (req, res) => {
   userController.createUser(req, res);
 });
-router.post("/sign-in", validateUserSignIn, userVlidation, (req, res) => {
+router.post("/sign-in", validateUserSignIn, userValidation, (req, res) => {
   userController.userSignIn(req, res);
 });
 router.post("/sign-out", isAuth, (req, res) => {
@@ -36,5 +36,8 @@ router.post(
     userController.uploadProfile(req, res);
   }
 );
+router.post("/getpics", (req, res) => {
+  userController.getPics(req, res);
+});
 
 module.exports = router;
