@@ -59,7 +59,7 @@ const userSignIn = async (req, res) => {
   const userInfo = {
     fullname: user.name,
     email: user.email,
-    image: user.image ? user.image : "",
+    images: user.images ? user.images : "",
   };
 
   res.json({ success: true, user: userInfo, token });
@@ -74,17 +74,18 @@ const uploadProfile = async (req, res) => {
 
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      public_id: `${user._id}_profile`,
+      public_id: `${user._id}_${Math.random()}_profile`,
       width: 500,
       height: 500,
       crop: "fill",
     });
 
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id,
-      { image: result.url },
-      { new: true }
-    );
+    await User.findByIdAndUpdate({_id: user._id}, {
+      $push: {
+        images: result.url,
+      }
+    });
+    
     res
       .status(201)
       .json({ success: true, message: "Your image has been saved to our db!" });
@@ -96,9 +97,7 @@ const uploadProfile = async (req, res) => {
   }
 };
 
-const getPics = async (req, res) => {
-  
-}
+const getPics = async (req, res) => {};
 
 const signOut = async (req, res) => {
   if (req.headers && req.headers.authorization) {
@@ -122,5 +121,6 @@ module.exports = {
   createUser,
   userSignIn,
   uploadProfile,
+  getPics,
   signOut,
 };

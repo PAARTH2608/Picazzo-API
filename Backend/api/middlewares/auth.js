@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const { User, Admin } = require("../models");
 
 exports.isAuth = async (req, res, next) => {
   if (req.headers && req.headers.authorization) {
@@ -7,7 +7,10 @@ exports.isAuth = async (req, res, next) => {
 
     try {
       const decode = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decode.userId);
+      const user =
+        req.query.type === "user"
+          ? await User.findById(decode.userId)
+          : await Admin.findById(decode.userId);
       if (!user) {
         return res.json({ success: false, message: "unauthorized access!" });
       }

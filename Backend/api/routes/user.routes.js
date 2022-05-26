@@ -36,7 +36,7 @@ router.post(
     userController.uploadProfile(req, res);
   }
 );
-router.post("/getpics", (req, res) => {
+router.get("/getpics", (req, res) => {
   userController.getPics(req, res);
 });
 

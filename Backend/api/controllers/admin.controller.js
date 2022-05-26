@@ -1,77 +1,127 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const saltRounds = 14;
-const { Admin } = require('../models');
+const jwt = require("jsonwebtoken");
+const { Admin } = require("../models");
+const cloudinary = require("../config/imageUpload");
 
-const registerAdmin = async (req, res) => {
-	try {
-		const checkExistence = await Admin.findOne({
-			email: req.body.email,
-		});
-		if (checkExistence) {
-			res.status(200).send({
-				message: 'Admin Already Exists',
-				error: true,
-			});
-		} else {
-			const hasedPassword = await bcrypt.hash(
-				req.body.password,
-				saltRounds
-			);
-			const newAdmin = req.body;
-			newAdmin.password = hasedPassword;
-			const AdminInfo = await Admin.create(newAdmin);
-			const token = jwt.sign(
-				{
-					email: AdminInfo.email,
-					adminId: AdminInfo._id,
-				},
-				process.env.JWT_SECRET || 'key'
-			);
-			res.status(200).send({
-				message: 'Admin Registered Successfully',
-				AdminInfo,
-				token,
-			});
-		}
-	} catch (error) {
-		console.log('error', error);
-		res.status(500).send({
-			message: error.toString(),
-		});
-	}
+const createUser = async (req, res) => {
+  const { name, email, password } = req.body;
+  const isNewUser = await Admin.isThisEmailInUse(email);
+  if (!isNewUser)
+    return res.json({
+      success: false,
+      message: "This email is already in use, try sign-in",
+    });
+  const user = await Admin({
+    name,
+    email,
+    password,
+  });
+  await user.save();
+  res.json({ success: true, user });
 };
 
-const login = async (req, res) => {
-	try {
-		console.log('llll');
-		console.log(req.body);
-		let admin = await Admin.findOne({ email: req.body.email });
-		if (admin === null) {
-			return res.status(404).send({
-				message: 'Admin not found',
-			});
-		}
-		const token = jwt.sign(
-			{
-				phone: admin.phone,
-				adminId: admin._id,
-			},
-			process.env.JWT_SECRET || 'key'
-		);
-		let adminInfo = {
-			...admin._doc,
-		};
-		delete adminInfo['password'];
-		return res.status(200).send({ adminInfo, token });
-	} catch (err) {
-		console.log('error:', err);
-		res.status(500).send({
-			message: err.toString(),
-		});
-	}
+const userSignIn = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await Admin.findOne({ email });
+
+  if (!user)
+    return res.json({
+      success: false,
+      message: "user not found, with the given email!",
+    });
+
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch)
+    return res.json({
+      success: false,
+      message: "email / password does not match!",
+    });
+
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
+
+  let oldTokens = user.tokens || [];
+
+  if (oldTokens.length) {
+    oldTokens = oldTokens.filter((t) => {
+      const timeDiff = (Date.now() - parseInt(t.signedAt)) / 1000;
+      if (timeDiff < 86400) {
+        return t;
+      }
+    });
+  }
+
+  await Admin.findByIdAndUpdate(user._id, {
+    tokens: [...oldTokens, { token, signedAt: Date.now().toString() }],
+  });
+
+  const userInfo = {
+    fullname: user.name,
+    email: user.email,
+    image: user.image ? user.image : "",
+  };
+
+  res.json({ success: true, user: userInfo, token });
 };
+
+const uploadProfile = async (req, res) => {
+  const { user } = req;
+  if (!user)
+    return res
+      .status(401)
+      .json({ success: false, message: "unauthorized access!" });
+
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      public_id: `${user._id}_profile`,
+      width: 500,
+      height: 500,
+      crop: "fill",
+    });
+
+    const updatedUser = await Admin.findByIdAndUpdate(
+      user._id,
+      { image: result.url },
+      { new: true }
+    );
+    res
+      .status(201)
+      .json({ success: true, message: "Your image has been saved to our db!" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "server error, try after some time" });
+    console.log("Error while uploading profile image", error.message);
+  }
+};
+
+const getPics = async (req, res) => {
+  
+}
+
+const signOut = async (req, res) => {
+  if (req.headers && req.headers.authorization) {
+    const token = req.headers.authorization.split(" ")[1];
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Authorization fail!" });
+    }
+
+    const tokens = req.user.tokens;
+
+    const newTokens = tokens.filter((t) => t.token !== token);
+
+    await Admin.findByIdAndUpdate(req.user._id, { tokens: newTokens });
+    res.json({ success: true, message: "Sign out successfully!" });
+  }
+};
+
 module.exports = {
-	registerAdmin,
-	login
+  createUser,
+  userSignIn,
+  uploadProfile,
+  getPics,
+  signOut,
 };
