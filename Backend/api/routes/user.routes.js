@@ -36,8 +36,8 @@ router.post(
     userController.uploadProfile(req, res);
   }
 );
-router.get("/getpics", (req, res) => {
-  userController.getPics(req, res);
+router.get("/getgeneratedpics", isAuth, (req, res) => {
+  userController.getGeneratedPics(req, res);
 });
 
 module.exports = router;

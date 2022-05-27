@@ -80,12 +80,15 @@ const uploadProfile = async (req, res) => {
       crop: "fill",
     });
 
-    await User.findByIdAndUpdate({_id: user._id}, {
-      $push: {
-        images: result.url,
+    await User.findByIdAndUpdate(
+      { _id: user._id },
+      {
+        $push: {
+          images: result.url,
+        },
       }
-    });
-    
+    );
+
     res
       .status(201)
       .json({ success: true, message: "Your image has been saved to our db!" });
@@ -97,7 +100,17 @@ const uploadProfile = async (req, res) => {
   }
 };
 
-const getPics = async (req, res) => {};
+// to get the pics coming from the model to phone to the mongoDB
+const getGeneratedPics = async (req, res) => {
+  const user = await User.find({ name: req.body.name });
+  // console.log(user);
+  if (!user) {
+    return res
+      .status(401)
+      .json({ success: false, message: "unauthorized access!" });
+  }
+  res.json({ success: true, user });
+};
 
 const signOut = async (req, res) => {
   if (req.headers && req.headers.authorization) {
@@ -121,6 +134,6 @@ module.exports = {
   createUser,
   userSignIn,
   uploadProfile,
-  getPics,
+  getGeneratedPics,
   signOut,
 };
