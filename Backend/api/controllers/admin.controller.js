@@ -112,7 +112,7 @@ const getPics = async (req, res) => {
       .json({ success: false, message: "unauthorized access!" });
   }
   res.json({ success: true, admin });
-}
+};
 
 // sign-out route for admin
 const signOut = async (req, res) => {

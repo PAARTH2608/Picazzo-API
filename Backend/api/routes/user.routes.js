@@ -28,14 +28,9 @@ router.post("/sign-in", validateUserSignIn, userValidation, (req, res) => {
 router.post("/sign-out", isAuth, (req, res) => {
   userController.signOut(req, res);
 });
-router.post(
-  "/upload",
-  isAuth,
-  uploads.single("generatedImage"),
-  (req, res) => {
-    userController.uploadProfile(req, res);
-  }
-);
+router.post("/upload", isAuth, uploads.single("generatedImage"), (req, res) => {
+  userController.uploadProfile(req, res);
+});
 router.get("/getgeneratedpics", isAuth, (req, res) => {
   userController.getGeneratedPics(req, res);
 });

@@ -119,17 +119,17 @@ const getGeneratedPics = async (req, res) => {
 // user gets access to styled images on his UI
 const getStyledPics = async (req, res) => {
   MongoClient.connect(process.env.MONGO_URI, function (err, client) {
-  if (err) throw err;
+    if (err) throw err;
 
-  var db = client.db('Picazzo');
+    var db = client.db("Picazzo");
 
-  db.collection('admins').findOne({}, function (findErr, result) {
-    if (findErr) throw findErr;
-    const resultImages = result.images;
-    res.json({ success: true, resultImages });
-    client.close();
+    db.collection("admins").findOne({}, function (findErr, result) {
+      if (findErr) throw findErr;
+      const resultImages = result.images;
+      res.json({ success: true, resultImages });
+      client.close();
+    });
   });
-}); 
 };
 
 // user sign-out
