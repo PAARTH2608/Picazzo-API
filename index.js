@@ -20,7 +20,7 @@ app.use(function (err, req, res, next) {
 });
 // port added dynamically
 const PORT = process.env.PORT || 8002;
-
-app.listen(8001, function() {
+const server = http.createServer(app);
+server.listen(8001, function() {
     console.log(`Server is up on ${PORT}`);
 });
