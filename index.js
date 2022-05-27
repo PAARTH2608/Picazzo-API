@@ -24,6 +24,3 @@ const PORT = process.env.PORT || 8002;
 app.listen(8001, function() {
     console.log(`Server is up on ${PORT}`);
 });
-
-// const server = http.createServer(app);
-// server.listen(PORT, () => `Server running on PORT ${PORT}`);
