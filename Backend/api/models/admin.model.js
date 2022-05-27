@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
 
 let AdminSchema = mongoose.Schema({
   name: {
@@ -14,7 +15,7 @@ let AdminSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  image: [{ type: String }],
+  images: [],
   tokens: [{ type: Object }],
   isAdmin: Boolean
 });

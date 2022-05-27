@@ -21,24 +21,29 @@ const fileFilter = (req, file, cb) => {
 const uploads = multer({ storage, fileFilter });
 
 router.post("/create-admin", validateUserSignUp, userValidation, (req, res) => {
-    userController.createUser(req, res);
-  });
-  router.post("/sign-in-admin", validateUserSignIn, userValidation, (req, res) => {
+  adminController.createUser(req, res);
+});
+router.post(
+  "/sign-in-admin",
+  validateUserSignIn,
+  userValidation,
+  (req, res) => {
     adminController.userSignIn(req, res);
-  });
-  router.post("/sign-out", isAuth, (req, res) => {
-    adminController.signOut(req, res);
-  });
-  router.post(
-    "/uploadPics",
-    isAuth,
-    uploads.single("styleImages"),
-    (req, res) => {
-      adminController.uploadProfile(req, res);
-    }
-  );
-  router.get("/getpics", (req, res) => {
-    adminController.getPics(req, res);
-  });
+  }
+);
+router.post("/sign-out", isAuth, (req, res) => {
+  adminController.signOut(req, res);
+});
+router.post(
+  "/uploadPics",
+  isAuth,
+  uploads.single("styleImages"),
+  (req, res) => {
+    adminController.uploadProfile(req, res);
+  }
+);
+router.get("/getpics", isAuth, (req, res) => {
+  adminController.getPics(req, res);
+});
 
 module.exports = router;

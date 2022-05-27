@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { Admin } = require("../models");
 const cloudinary = require("../config/imageUpload");
 
+// creating new admin
 const createUser = async (req, res) => {
   const { name, email, password } = req.body;
   const isNewUser = await Admin.isThisEmailInUse(email);
@@ -19,6 +20,7 @@ const createUser = async (req, res) => {
   res.json({ success: true, user });
 };
 
+// sign-in new admin
 const userSignIn = async (req, res) => {
   const { email, password } = req.body;
 
@@ -65,6 +67,7 @@ const userSignIn = async (req, res) => {
   res.json({ success: true, user: userInfo, token });
 };
 
+// admin upload pics to cloudinary (these are styled pics)
 const uploadProfile = async (req, res) => {
   const { user } = req;
   if (!user)
@@ -80,10 +83,13 @@ const uploadProfile = async (req, res) => {
       crop: "fill",
     });
 
-    const updatedUser = await Admin.findByIdAndUpdate(
-      user._id,
-      { image: result.url },
-      { new: true }
+    await Admin.findByIdAndUpdate(
+      { _id: user._id },
+      {
+        $push: {
+          images: result.url,
+        },
+      }
     );
     res
       .status(201)
@@ -96,10 +102,19 @@ const uploadProfile = async (req, res) => {
   }
 };
 
+// admin gets the access of the styled pics
 const getPics = async (req, res) => {
-  
+  const admin = await Admin.find({ name: req.body.name });
+  // console.log(user);
+  if (!admin) {
+    return res
+      .status(401)
+      .json({ success: false, message: "unauthorized access!" });
+  }
+  res.json({ success: true, admin });
 }
 
+// sign-out route for admin
 const signOut = async (req, res) => {
   if (req.headers && req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];

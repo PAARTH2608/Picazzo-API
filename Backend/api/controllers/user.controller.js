@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
+const MongoClient = require("mongodb").MongoClient;
 const { User } = require("../models");
 const cloudinary = require("../config/imageUpload");
 
+// creating new user
 const createUser = async (req, res) => {
   const { name, email, password } = req.body;
   const isNewUser = await User.isThisEmailInUse(email);
@@ -19,6 +21,7 @@ const createUser = async (req, res) => {
   res.json({ success: true, user });
 };
 
+// sign-in new user
 const userSignIn = async (req, res) => {
   const { email, password } = req.body;
 
@@ -65,6 +68,7 @@ const userSignIn = async (req, res) => {
   res.json({ success: true, user: userInfo, token });
 };
 
+// user upload generated image to cloudinary after being processed by the DL model
 const uploadProfile = async (req, res) => {
   const { user } = req;
   if (!user)
@@ -100,7 +104,7 @@ const uploadProfile = async (req, res) => {
   }
 };
 
-// to get the pics coming from the model to phone to the mongoDB
+// user gets access to the generated images
 const getGeneratedPics = async (req, res) => {
   const user = await User.find({ name: req.body.name });
   // console.log(user);
@@ -112,6 +116,23 @@ const getGeneratedPics = async (req, res) => {
   res.json({ success: true, user });
 };
 
+// user gets access to styled images on his UI
+const getStyledPics = async (req, res) => {
+  MongoClient.connect(process.env.MONGO_URI, function (err, client) {
+  if (err) throw err;
+
+  var db = client.db('Picazzo');
+
+  db.collection('admins').findOne({}, function (findErr, result) {
+    if (findErr) throw findErr;
+    const resultImages = result.images;
+    res.json({ success: true, resultImages });
+    client.close();
+  });
+}); 
+};
+
+// user sign-out
 const signOut = async (req, res) => {
   if (req.headers && req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
@@ -134,6 +155,7 @@ module.exports = {
   createUser,
   userSignIn,
   uploadProfile,
+  getStyledPics,
   getGeneratedPics,
   signOut,
 };

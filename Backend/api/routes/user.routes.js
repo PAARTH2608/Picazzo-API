@@ -39,5 +39,8 @@ router.post(
 router.get("/getgeneratedpics", isAuth, (req, res) => {
   userController.getGeneratedPics(req, res);
 });
+router.get("/getstyledpics", isAuth, (req, res) => {
+  userController.getStyledPics(req, res);
+});
 
 module.exports = router;
