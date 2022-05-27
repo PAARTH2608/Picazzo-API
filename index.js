@@ -18,7 +18,7 @@ app.use('/api', router);
 app.use(function (err, req, res, next) {
 	res.status(err.status || 404).send("route doesn't exist");
 });
-
+// port added dynamically
 const PORT = process.env.PORT || 8002;
 
 app.listen(8001, function() {
