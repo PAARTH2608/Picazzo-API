@@ -15,7 +15,7 @@ let AdminSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  images: [],
+  images: [Object],
   tokens: [{ type: Object }],
   isAdmin: Boolean
 });

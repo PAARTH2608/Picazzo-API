@@ -71,6 +71,7 @@ const userSignIn = async (req, res) => {
 // user upload generated image to cloudinary after being processed by the DL model
 const uploadProfile = async (req, res) => {
   const { user } = req;
+  console.log(user);
   if (!user)
     return res
       .status(401)
@@ -83,12 +84,11 @@ const uploadProfile = async (req, res) => {
       height: 500,
       crop: "fill",
     });
-
     await User.findByIdAndUpdate(
       { _id: user._id },
       {
         $push: {
-          images: result.url,
+          images: { _id: user._id, url: result.url },
         },
       }
     );
@@ -107,7 +107,6 @@ const uploadProfile = async (req, res) => {
 // user gets access to the generated images
 const getGeneratedPics = async (req, res) => {
   const user = await User.find({ name: req.body.name });
-  // console.log(user);
   if (!user) {
     return res
       .status(401)
@@ -126,6 +125,7 @@ const getStyledPics = async (req, res) => {
     db.collection("admins").findOne({}, function (findErr, result) {
       if (findErr) throw findErr;
       const resultImages = result.images;
+      // console.log(resultImages);
       res.json({ success: true, resultImages });
       client.close();
     });

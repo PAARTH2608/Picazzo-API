@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -15,12 +15,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  images: [],
+  images: [{ 
+    _id: String,
+    url: String,
+   }],
   tokens: [{ type: Object }],
 });
 
-userSchema.pre('save', function (next) {
-  if (this.isModified('password')) {
+userSchema.pre("save", function (next) {
+  if (this.isModified("password")) {
     bcrypt.hash(this.password, 8, (err, hash) => {
       if (err) return next(err);
 
@@ -31,29 +34,29 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.methods.comparePassword = async function (password) {
-  if (!password) throw new Error('Password is mission, can not compare!');
+  if (!password) throw new Error("Password is mission, can not compare!");
 
   try {
     const result = await bcrypt.compare(password, this.password);
     return result;
   } catch (error) {
-    console.log('Error while comparing password!', error.message);
+    console.log("Error while comparing password!", error.message);
   }
 };
 
 userSchema.statics.isThisEmailInUse = async function (email) {
-  if (!email) throw new Error('Invalid Email');
+  if (!email) throw new Error("Invalid Email");
   try {
     const user = await this.findOne({ email });
     if (user) return false;
 
     return true;
   } catch (error) {
-    console.log('error inside isThisEmailInUse method', error.message);
+    console.log("error inside isThisEmailInUse method", error.message);
     return false;
   }
 };
 
-let User = mongoose.model('User', userSchema);
+let User = mongoose.model("User", userSchema);
 
 module.exports = User;

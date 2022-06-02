@@ -77,7 +77,7 @@ const uploadProfile = async (req, res) => {
 
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      public_id: `${user._id}_profile`,
+      public_id: `${user._id}_${Math.random()}_profile`,
       width: 500,
       height: 500,
       crop: "fill",
@@ -87,7 +87,11 @@ const uploadProfile = async (req, res) => {
       { _id: user._id },
       {
         $push: {
-          images: result.url,
+          images: {
+            _id: `${user._id}_${Math.random()}`,
+            name: `${user.name}_${Math.random()}`,
+            url: result.url,
+          },
         },
       }
     );
@@ -105,7 +109,6 @@ const uploadProfile = async (req, res) => {
 // admin gets the access of the styled pics
 const getPics = async (req, res) => {
   const admin = await Admin.find({ name: req.body.name });
-  // console.log(user);
   if (!admin) {
     return res
       .status(401)
