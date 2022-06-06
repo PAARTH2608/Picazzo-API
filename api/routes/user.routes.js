@@ -40,6 +40,12 @@ router.post("/likeImage", isAuth, (req, res) => {
 router.post("/unlikeImage", isAuth, (req, res) => {
   userController.unLikeImage(req, res);
 });
+router.post("/follow", isAuth, (req, res) => {
+  userController.addFollowers(req, res);
+});
+router.post("/unfollow", isAuth, (req, res) => {
+  userController.removeFollowers(req, res);
+});
 router.get("/getstyledpics", isAuth, (req, res) => {
   userController.getStyledPics(req, res);
 });

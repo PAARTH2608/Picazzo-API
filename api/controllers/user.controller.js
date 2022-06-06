@@ -162,6 +162,7 @@ const likeImage = async (req, res) => {
     totalLikes: likes.length,
   });
 };
+
 const unLikeImage = async (req, res) => {
   const { imageId } = req.body;
   const image = await Image.findById(imageId);
@@ -186,6 +187,56 @@ const unLikeImage = async (req, res) => {
     totalLikes: likes.length,
   });
 };
+
+const addFollowers = async (req, res) => {
+  const { userId } = req.body;
+  const user = await User.findById(userId);
+  if (!user)
+    return res.json({
+      success: false,
+      message: "user not found, with the given id!",
+    });
+  const followers = user.followers || [];
+  const isFollowed = followers.includes(req.user._id);
+  if (isFollowed) {
+    return res.json({
+      success: false,
+      message: "you have already followed this user",
+    });
+  }
+  followers.push(req.user._id);
+  await User.findByIdAndUpdate(userId, { followers });
+  res.json({
+    success: true,
+    message: "user followed successfully!",
+    totalFollowers: followers.length,
+  });
+}
+
+const removeFollowers = async (req, res) => {
+  const { userId } = req.body;
+  const user = await User.findById(userId);
+  if (!user)
+    return res.json({
+      success: false,
+      message: "user not found, with the given id!",
+    });
+  const followers = user.followers || [];
+  const isFollowed = followers.includes(req.user._id);
+  if (!isFollowed) {
+    return res.json({
+      success: false,
+      message: "you have not followed this user",
+    });
+  }
+  followers.splice(followers.indexOf(req.user._id), 1);
+  await User.findByIdAndUpdate(userId, { followers });
+  res.json({
+    success: true,
+    message: "user unfollowed successfully!",
+    totalFollowers: followers.length,
+  });
+}
 
 // user sign-out
 const signOut = async (req, res) => {
@@ -213,5 +264,7 @@ module.exports = {
   getGeneratedPics,
   likeImage,
   unLikeImage,
+  addFollowers,
+  removeFollowers,
   signOut,
 };

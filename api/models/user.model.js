@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
       ref: "Image",
     },
   ],
+  followers: [],
   tokens: [{ type: Object }],
 });
 
