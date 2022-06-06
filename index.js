@@ -2,8 +2,39 @@ const express = require('express');
 const connectDB = require('./api/config/connectDB');
 const http = require("http");
 const cors = require('cors');
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: "Picazzo API",
+            description: "API documentation for Picazzo",
+            contact: {
+                name: "Paarth"
+            },
+            servers: ["http://localhost:8001"],
+        }
+    },
+    apis: ["./api/routes/*.js"]
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
 require('dotenv').config();
 const app = express();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+/**
+ * @swagger
+ * /api/test:
+ * get:
+ *  description: Test route
+ *  responses:
+ *      '200':
+ *      description: Testing successful
+ */
 
 connectDB();
 
