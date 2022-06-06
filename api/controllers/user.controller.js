@@ -138,6 +138,55 @@ const getStyledPics = async (req, res) => {
   });
 };
 
+const likeImage = async (req, res) => {
+  const { imageId } = req.body;
+  const image = await Image.findById(imageId);
+  if (!image)
+    return res.json({
+      success: false,
+      message: "image not found, with the given id!",
+    });
+  const likes = image.likes || [];
+  const isLiked = likes.includes(req.user._id);
+  if (isLiked) {
+    return res.json({
+      success: false,
+      message: "you have already liked this image",
+    });
+  }
+  likes.push(req.user._id);
+  await Image.findByIdAndUpdate(imageId, { likes });
+  res.json({
+    success: true,
+    message: "image liked successfully!",
+    totalLikes: likes.length,
+  });
+};
+const unLikeImage = async (req, res) => {
+  const { imageId } = req.body;
+  const image = await Image.findById(imageId);
+  if (!image)
+    return res.json({
+      success: false,
+      message: "image not found, with the given id!",
+    });
+  const likes = image.likes || [];
+  const isLiked = likes.includes(req.user._id);
+  if (!isLiked) {
+    return res.json({
+      success: false,
+      message: "you have not liked this image",
+    });
+  }
+  likes.splice(likes.indexOf(req.user._id), 1);
+  await Image.findByIdAndUpdate(imageId, { likes });
+  res.json({
+    success: true,
+    message: "image unliked successfully!",
+    totalLikes: likes.length,
+  });
+};
+
 // user sign-out
 const signOut = async (req, res) => {
   if (req.headers && req.headers.authorization) {
@@ -162,5 +211,7 @@ module.exports = {
   uploadProfile,
   getStyledPics,
   getGeneratedPics,
+  likeImage,
+  unLikeImage,
   signOut,
 };
