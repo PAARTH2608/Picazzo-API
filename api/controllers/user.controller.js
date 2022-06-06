@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const MongoClient = require("mongodb").MongoClient;
 const { User } = require("../models");
 const cloudinary = require("../config/imageUpload");
+const Image = require("../models/image.model");
 
 // creating new user
 const createUser = async (req, res) => {
@@ -71,12 +73,10 @@ const userSignIn = async (req, res) => {
 // user upload generated image to cloudinary after being processed by the DL model
 const uploadProfile = async (req, res) => {
   const { user } = req;
-  console.log(user);
   if (!user)
     return res
       .status(401)
       .json({ success: false, message: "unauthorized access!" });
-
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
       public_id: `${user._id}_${Math.random()}_profile`,
@@ -84,15 +84,22 @@ const uploadProfile = async (req, res) => {
       height: 500,
       crop: "fill",
     });
+    const image = new Image({
+      _id: new mongoose.Types.ObjectId(),
+      url: result.url,
+      likes: req.body.likes,
+      user: user._id,
+    });
+    image.save();
+
     await User.findByIdAndUpdate(
       { _id: user._id },
       {
         $push: {
-          images: { _id: user._id, url: result.url },
+          images: { _id: image._id },
         },
       }
     );
-
     res
       .status(201)
       .json({ success: true, message: "Your image has been saved to our db!" });
@@ -103,10 +110,9 @@ const uploadProfile = async (req, res) => {
     console.log("Error while uploading profile image", error.message);
   }
 };
-
 // user gets access to the generated images
 const getGeneratedPics = async (req, res) => {
-  const user = await User.find({ name: req.body.name });
+  const user = await User.find({ name: req.body.name }).populate("images");
   if (!user) {
     return res
       .status(401)
@@ -150,7 +156,6 @@ const signOut = async (req, res) => {
     res.json({ success: true, message: "Sign out successfully!" });
   }
 };
-
 module.exports = {
   createUser,
   userSignIn,

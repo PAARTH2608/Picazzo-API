@@ -16,8 +16,8 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   images: [{ 
-    _id: String,
-    url: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Image",
    }],
   tokens: [{ type: Object }],
 });
