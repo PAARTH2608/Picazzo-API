@@ -34,6 +34,12 @@ router.post("/upload", isAuth, uploads.single("generatedImage"), (req, res) => {
 router.get("/getgeneratedpics", isAuth, (req, res) => {
   userController.getGeneratedPics(req, res);
 });
+router.post("/likeImage", isAuth, (req, res) => {
+  userController.likeImage(req, res);
+});
+router.post("/unlikeImage", isAuth, (req, res) => {
+  userController.unLikeImage(req, res);
+});
 router.get("/getstyledpics", isAuth, (req, res) => {
   userController.getStyledPics(req, res);
 });
