@@ -15,10 +15,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  images: [{ 
-    _id: String,
-    url: String,
-   }],
+  images: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Image",
+    },
+  ],
   tokens: [{ type: Object }],
 });
 

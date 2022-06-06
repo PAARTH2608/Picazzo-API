@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 let AdminSchema = mongoose.Schema({
   name: {
@@ -15,13 +15,18 @@ let AdminSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  images: [Object],
+  images: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Image",
+    },
+  ],
   tokens: [{ type: Object }],
-  isAdmin: Boolean
+  isAdmin: Boolean,
 });
 
-AdminSchema.pre('save', function (next) {
-  if (this.isModified('password')) {
+AdminSchema.pre("save", function (next) {
+  if (this.isModified("password")) {
     bcrypt.hash(this.password, 8, (err, hash) => {
       if (err) return next(err);
 
@@ -32,25 +37,25 @@ AdminSchema.pre('save', function (next) {
 });
 
 AdminSchema.methods.comparePassword = async function (password) {
-  if (!password) throw new Error('Password is mission, can not compare!');
+  if (!password) throw new Error("Password is mission, can not compare!");
 
   try {
     const result = await bcrypt.compare(password, this.password);
     return result;
   } catch (error) {
-    console.log('Error while comparing password!', error.message);
+    console.log("Error while comparing password!", error.message);
   }
 };
 
 AdminSchema.statics.isThisEmailInUse = async function (email) {
-  if (!email) throw new Error('Invalid Email');
+  if (!email) throw new Error("Invalid Email");
   try {
     const user = await this.findOne({ email });
     if (user) return false;
 
     return true;
   } catch (error) {
-    console.log('error inside isThisEmailInUse method', error.message);
+    console.log("error inside isThisEmailInUse method", error.message);
     return false;
   }
 };
