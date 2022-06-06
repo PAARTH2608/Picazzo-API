@@ -151,7 +151,6 @@ const signOut = async (req, res) => {
   }
 };
 
-// controllers
 module.exports = {
   createUser,
   userSignIn,
