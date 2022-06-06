@@ -113,7 +113,7 @@ const uploadProfile = async (req, res) => {
 
 // admin gets the access of the styled pics
 const getPics = async (req, res) => {
-  const admin = await Admin.find({ name: req.body.name });
+  const admin = await Admin.find({ name: req.body.name }).populate("images");
   if (!admin) {
     return res
       .status(401)
