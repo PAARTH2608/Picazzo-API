@@ -123,19 +123,13 @@ const getGeneratedPics = async (req, res) => {
 
 // user gets access to styled images on his UI
 const getStyledPics = async (req, res) => {
-  MongoClient.connect(process.env.MONGO_URI, function (err, client) {
-    if (err) throw err;
-
-    var db = client.db("Picazzo");
-
-    db.collection("admins").findOne({}, function (findErr, result) {
-      if (findErr) throw findErr;
-      const resultImages = result.images;
-      // console.log(resultImages);
-      res.json({ success: true, resultImages });
-      client.close();
-    });
-  });
+  const images = await Image.find({});
+  if (!images) {
+    return res
+      .status(401)
+      .json({ success: false, message: "unauthorized access!" });
+  }
+  res.json({ success: true, images });
 };
 
 const likeImage = async (req, res) => {
@@ -211,7 +205,7 @@ const addFollowers = async (req, res) => {
     message: "user followed successfully!",
     totalFollowers: followers.length,
   });
-}
+};
 
 const removeFollowers = async (req, res) => {
   const { userId } = req.body;
@@ -236,7 +230,7 @@ const removeFollowers = async (req, res) => {
     message: "user unfollowed successfully!",
     totalFollowers: followers.length,
   });
-}
+};
 
 // user sign-out
 const signOut = async (req, res) => {
