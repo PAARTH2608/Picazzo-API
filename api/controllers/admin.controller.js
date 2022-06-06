@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const { Admin } = require("../models");
 const cloudinary = require("../config/imageUpload");
+const Image = require("../models/image.model");
 
 // creating new admin
 const createUser = async (req, res) => {
@@ -82,16 +84,19 @@ const uploadProfile = async (req, res) => {
       height: 500,
       crop: "fill",
     });
+    const image = new Image({
+      _id: new mongoose.Types.ObjectId(),
+      url: result.url,
+      likes: req.body.likes,
+      user: user._id,
+    });
+    image.save();
 
     await Admin.findByIdAndUpdate(
       { _id: user._id },
       {
         $push: {
-          images: {
-            _id: `${user._id}_${Math.random()}`,
-            name: `${user.name}_${Math.random()}`,
-            url: result.url,
-          },
+          images: { _id: image._id },
         },
       }
     );
