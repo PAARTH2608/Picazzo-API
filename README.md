@@ -15,9 +15,7 @@ Picazzo is an API consisting of various features which includes user authenticat
     <br />
   <p>
       DOCS: <a href="https://documenter.getpostman.com/view/18563762/Uz5MFZgk"><strong> PICAZZO-API</strong></a></br>
-      URL:    ```sh http://localhost:8001/api ```    ```sh
-   https://github.com/PAARTH2608/Picazzo-API.git
-   ```
+      URL:   ```bash http://localhost:8001/api ```
 </p>    
 </p>
 </p>
