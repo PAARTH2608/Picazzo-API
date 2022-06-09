@@ -6,7 +6,7 @@ Picazzo is an API consisting of various features which includes user authenticat
 <br />
 <p align="center">
   <a href="https://github.com/PAARTH2608/Picazzo-API">
-    <img src="https://www.v7labs.com/blog/neural-style-transfer" alt="project pic" width="1140" height="426">
+    <img src="https://assets-global.website-files.com/5d7b77b063a9066d83e1209c/627d124493a74d43a0294052_613ec308797490827ea06868_mona%2520lisa.png" alt="project pic" width="1140" height="426">
   </a>
  <p>
     <br />
