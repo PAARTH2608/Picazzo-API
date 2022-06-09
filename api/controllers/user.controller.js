@@ -112,7 +112,7 @@ const uploadProfile = async (req, res) => {
 };
 // user gets access to the generated images
 const getGeneratedPics = async (req, res) => {
-  const user = await User.find({ name: req.body.name }).populate("images");
+  const user = await User.find({ email: req.body.email }).populate("images");
   if (!user) {
     return res
       .status(401)
