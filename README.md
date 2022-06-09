@@ -11,7 +11,7 @@ Picazzo is an API consisting of various features which includes user authenticat
  
  
     <br />
-    <a href="./api"><strong>Explore the code »</strong></a>
+    <a href="./api"><strong> Explore the code » </strong></a>
     <br />
     <br />
    
