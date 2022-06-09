@@ -1,5 +1,6 @@
 # Picazzo-API
-## About The Project - Picazzo is an API consisting of various features which includes user authentication, uploading style image which gives user, an admin priorities. Apart from that user can like and dislike and image and follow and unfollow a user. App displays the image in a sorted order with most number of likes which comes from backend.
+## About The Project 
+Picazzo is an API consisting of various features which includes user authentication, uploading style image which gives user, an admin priorities. Apart from that user can like and dislike and image and follow and unfollow a user. App displays the image in a sorted order with most number of likes which comes from backend.
 
 <!-- PROJECT LOGO -->
 <br />
