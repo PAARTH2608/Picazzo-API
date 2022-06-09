@@ -5,9 +5,9 @@ Picazzo is an API consisting of various features which includes user authenticat
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-<!--   <a href="https://github.com/PAARTH2608/Smart-PDFs">
-    <img src="https://nanonets.com/blog/content/images/2020/10/pdf-language-translation-1.jpg" alt="project pic" width="1140" height="426">
-  </a> -->
+  <a href="https://github.com/PAARTH2608/Picazzo-API">
+    <img src="https://www.v7labs.com/blog/neural-style-transfer" alt="project pic" width="1140" height="426">
+  </a>
  <p>
     <br />
     <a href="./api"><strong> Explore the code » </strong></a>
