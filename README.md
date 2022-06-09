@@ -9,14 +9,14 @@ Picazzo is an API consisting of various features which includes user authenticat
     <img src="https://nanonets.com/blog/content/images/2020/10/pdf-language-translation-1.jpg" alt="project pic" width="1140" height="426">
   </a> -->
  
- 
+ <p>
     <br />
     <a href="./api"><strong> Explore the code » </strong></a>
     <br />
     <br />
    
         DOCS: [PICAZZO-API] (https://documenter.getpostman.com/view/18563762/Uz5MFZgk)
-
+</p>
 </p>
 
 <!-- ABOUT THE PROJECT -->
@@ -57,4 +57,7 @@ The Application Runs on **localhost:8001**
 <a href="https://twitter.com/PAARTHJAIN7" target="_blank"><img alt="Twitter" src="https://img.shields.io/badge/twitter-%231DA1F2.svg?&style=for-the-badge&logo=twitter&logoColor=white" /></a>
 <a href="https://www.instagram.com/_paarth7_/" target="_blank"><img alt="Instagram" src="https://img.shields.io/badge/instagram-%FF69B4.svg?&style=for-the-badge&logo=instagram&logoColor=white&color=cd486b" /></a>
 
+<p align="center">
 Made with :heart: by Paarth
+</p>
+
