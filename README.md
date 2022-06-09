@@ -9,12 +9,12 @@ Picazzo is an API consisting of various features which includes user authenticat
     <img src="https://nanonets.com/blog/content/images/2020/10/pdf-language-translation-1.jpg" alt="project pic" width="1140" height="426">
   </a> -->
  
-  <p align="center">
+ 
     <br />
     <a href="./api"><strong>Explore the code »</strong></a>
     <br />
     <br />
-  </p> 
+   
         DOCS: [PICAZZO-API] (https://documenter.getpostman.com/view/18563762/Uz5MFZgk)
 
 </p>
