@@ -15,11 +15,8 @@ Picazzo is an API consisting of various features which includes user authenticat
     <br />
     <br />
   </p> 
-  <p align="center">
         DOCS: [PICAZZO-API] (https://documenter.getpostman.com/view/18563762/Uz5MFZgk)
-    </p>
-    
- 
+
 </p>
 
 <!-- ABOUT THE PROJECT -->
