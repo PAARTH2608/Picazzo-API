@@ -31,7 +31,7 @@ router.post("/sign-out", isAuth, (req, res) => {
 router.post("/upload", isAuth, uploads.single("generatedImage"), (req, res) => {
   userController.uploadProfile(req, res);
 });
-router.get("/getgeneratedpics", (req, res) => {
+router.get("/getgeneratedpics", isAuth, (req, res) => {
   userController.getGeneratedPics(req, res);
 });
 router.post("/likeImage", isAuth, (req, res) => {
