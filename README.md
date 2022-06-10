@@ -34,7 +34,9 @@ Picazzo is an API consisting of various features which includes user authenticat
 To get a local copy up and running follow these simple steps.
 
 ## Prerequisites
-- Nodejs 18.3.0, Expressjs 4.18.0
+- Nodejs 18.3.0 
+- Expressjs 4.18.0
+- MongoDB 5.2
 
 ## Installation
 Clone the repo
