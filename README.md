@@ -1,6 +1,6 @@
 # Picazzo-API
 ## About The Project 
-Picazzo is an API consisting of various features which includes user authentication, uploading style image which gives user, an admin priorities. Apart from that user can like and dislike an image and follow and unfollow a user. App displays the image in a sorted order with most number of likes which comes from backend. Apart from that API stores the generated images that are styled by the neural style transfer model and send them back to the frontend. All images are properly encrypted and are stored in the cloud database.
+Picazzo API is a multi-functional API built for Picazzo-App which has certain end-points including user and admin authentication, follow and unfollow users, like and dislike the image. User can publicly see the images uploaded by other users and images are displayed based on the numbers of likes a particular image has. Main feature of this API is to merge the style image provided by the API and the content image provided by the user and return a beautiful generated image. 
 
 <!-- PROJECT LOGO -->
 <br />
