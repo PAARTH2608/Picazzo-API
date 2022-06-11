@@ -39,7 +39,7 @@ router.post(
   isAuth,
   uploads.single("styleImages"),
   (req, res) => {
-    adminController.uploadProfile(req, res);
+    adminController.uploadStyledPics(req, res);
   }
 );
 router.get("/getpics", isAuth, (req, res) => {

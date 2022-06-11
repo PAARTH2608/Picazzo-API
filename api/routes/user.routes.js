@@ -28,11 +28,19 @@ router.post("/sign-in", validateUserSignIn, userValidation, (req, res) => {
 router.post("/sign-out", isAuth, (req, res) => {
   userController.signOut(req, res);
 });
-router.post("/upload", isAuth, uploads.single("generatedImage"), (req, res) => {
-  userController.uploadProfile(req, res);
-});
+router.post(
+  "/applystyle",
+  isAuth,
+  // uploads.single("generatedImage"),
+  (req, res) => {
+    userController.applyStyles(req, res);
+  }
+);
 router.get("/getgeneratedpics", isAuth, (req, res) => {
   userController.getGeneratedPics(req, res);
+});
+router.get("/getstyledpics", isAuth, (req, res) => {
+  userController.getStyledPics(req, res);
 });
 router.post("/likeImage", isAuth, (req, res) => {
   userController.likeImage(req, res);
@@ -45,9 +53,6 @@ router.post("/follow", isAuth, (req, res) => {
 });
 router.post("/unfollow", isAuth, (req, res) => {
   userController.removeFollowers(req, res);
-});
-router.get("/getstyledpics", isAuth, (req, res) => {
-  userController.getStyledPics(req, res);
 });
 
 module.exports = router;

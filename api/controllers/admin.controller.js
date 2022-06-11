@@ -70,7 +70,7 @@ const userSignIn = async (req, res) => {
 };
 
 // admin upload pics to cloudinary (these are styled pics)
-const uploadProfile = async (req, res) => {
+const uploadStyledPics = async (req, res) => {
   const { user } = req;
   if (!user)
     return res
@@ -89,6 +89,7 @@ const uploadProfile = async (req, res) => {
       url: result.url,
       likes: req.body.likes,
       user: user._id,
+      imageType: "styled",
     });
     image.save();
 
@@ -144,7 +145,7 @@ const signOut = async (req, res) => {
 module.exports = {
   createUser,
   userSignIn,
-  uploadProfile,
+  uploadStyledPics,
   getPics,
   signOut,
 };

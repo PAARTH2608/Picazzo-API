@@ -4,6 +4,10 @@ const MongoClient = require("mongodb").MongoClient;
 const { User } = require("../models");
 const cloudinary = require("../config/imageUpload");
 const Image = require("../models/image.model");
+const deepai = require("deepai");
+
+require("dotenv").config();
+deepai.setApiKey(process.env.DEEPAI_API_KEY);
 
 // creating new user
 const createUser = async (req, res) => {
@@ -70,16 +74,21 @@ const userSignIn = async (req, res) => {
   res.json({ success: true, user: userInfo, token });
 };
 
-// user upload generated image to cloudinary after being processed by the DL model
-const uploadProfile = async (req, res) => {
+// user send the link of style and content images, gets the styled image
+const applyStyles = async (req, res) => {
   const { user } = req;
   if (!user)
     return res
       .status(401)
       .json({ success: false, message: "unauthorized access!" });
+
   try {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      public_id: `${user._id}_${Math.random()}_profile`,
+    const styledObj = await deepai.callStandardApi("fast-style-transfer", {
+      content: req.body.content_image,
+      style: req.body.style_image,
+    });
+    const result = await cloudinary.uploader.upload(styledObj.output_url, {
+      public_id: `${user._id}_${styledObj.id}`,
       width: 500,
       height: 500,
       crop: "fill",
@@ -89,9 +98,9 @@ const uploadProfile = async (req, res) => {
       url: result.url,
       likes: req.body.likes,
       user: user._id,
+      imageType: "generated",
     });
     image.save();
-
     await User.findByIdAndUpdate(
       { _id: user._id },
       {
@@ -100,36 +109,50 @@ const uploadProfile = async (req, res) => {
         },
       }
     );
-    res
-      .status(201)
-      .json({ success: true, message: "Your image has been saved to our db!" });
+    res.status(201).json({
+      success: true,
+      message: "Your image has been saved to our db!",
+      url: image.url,
+    });
+    // res.json({ success: true, url: styledObj.output_url, id: styledObj.id });
   } catch (error) {
     res
       .status(500)
       .json({ success: false, message: "server error, try after some time" });
-    console.log("Error while uploading profile image", error.message);
   }
 };
 // user gets access to the generated images
 const getGeneratedPics = async (req, res) => {
   const user = await User.find({ email: req.body.email }).populate("images");
-  if (!user) {
-    return res
-      .status(401)
-      .json({ success: false, message: "unauthorized access!" });
+  try {
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "unauthorized access!" });
+    }
+    res.json({ success: true, user });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "server error, try after some time" });
   }
-  res.json({ success: true, user });
 };
 
 // user gets access to styled images on his UI
 const getStyledPics = async (req, res) => {
-  const images = await Image.find({});
-  if (!images) {
-    return res
-      .status(401)
-      .json({ success: false, message: "unauthorized access!" });
+  try {
+    const images = await Image.find({imageType:"styled"}) ;
+    if (!images) {
+      return res
+        .status(401)
+        .json({ success: false, message: "unauthorized access!" });
+    }
+    res.json({ success: true, images });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "server error, try after some time" });
   }
-  res.json({ success: true, images });
 };
 
 const likeImage = async (req, res) => {
@@ -253,7 +276,6 @@ const signOut = async (req, res) => {
 module.exports = {
   createUser,
   userSignIn,
-  uploadProfile,
   getStyledPics,
   getGeneratedPics,
   likeImage,
@@ -261,4 +283,5 @@ module.exports = {
   addFollowers,
   removeFollowers,
   signOut,
+  applyStyles,
 };
