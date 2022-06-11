@@ -1,6 +1,6 @@
 # Picazzo-API
 ## About The Project 
-Picazzo is an API consisting of various features which includes user authentication, uploading style image which gives user, an admin priorities. Apart from that user can like and dislike and image and follow and unfollow a user. App displays the image in a sorted order with most number of likes which comes from backend. Apart from that API stores the generated images that are styled by the neural style transfer model and send them back to the frontend. All images are properly encrypted and are stored in the cloud database.
+Picazzo is an API consisting of various features which includes user authentication, uploading style image which gives user, an admin priorities. Apart from that user can like and dislike an image and follow and unfollow a user. App displays the image in a sorted order with most number of likes which comes from backend. Apart from that API stores the generated images that are styled by the neural style transfer model and send them back to the frontend. All images are properly encrypted and are stored in the cloud database.
 
 <!-- PROJECT LOGO -->
 <br />
@@ -14,7 +14,7 @@ Picazzo is an API consisting of various features which includes user authenticat
     <br />
     <br />
   <p>
-      DOCS : <a href="https://documenter.getpostman.com/view/18563762/Uz5MFZgk"><strong> PICAZZO-API</strong></a></br>
+      DOCS : <a href="https://documenter.getpostman.com/view/18563762/Uz5MFZgk" target="_blank" ><strong> PICAZZO-API</strong></a></br>
       URL : http://localhost:8001/api 
 
 </p>    
@@ -34,7 +34,9 @@ Picazzo is an API consisting of various features which includes user authenticat
 To get a local copy up and running follow these simple steps.
 
 ## Prerequisites
-- Nodejs 18.3.0, Expressjs 4.18.0
+- Nodejs 18.3.0 
+- Expressjs 4.18.0
+- MongoDB 5.2
 
 ## Installation
 Clone the repo
